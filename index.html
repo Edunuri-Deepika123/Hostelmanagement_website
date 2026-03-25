@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Maintenance Portal | Complaint Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i data-lucide="building-2"></i>
+                <span>HostelCare</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+                <li><a href="#raise" class="nav-link" data-section="raise">Raise Complaint</a></li>
+                <li><a href="#track" class="nav-link" data-section="track">Track Status</a></li>
+                <li><a href="#admin" class="nav-link" data-section="admin">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="app-content">
+        <!-- Home Section -->
+        <section id="home-section" class="page-section active">
+            <div class="hero">
+                <h1>Hostel Maintenance Portal</h1>
+                <p>Ensuring a comfortable living experience. Report issues and track their resolution in real-time.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary" onclick="navigateTo('raise')">
+                        <i data-lucide="plus-circle"></i> Report an Issue
+                    </button>
+                    <button class="btn btn-outline" onclick="navigateTo('track')">
+                        <i data-lucide="search"></i> Check Status
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Raise Complaint Section -->
+        <section id="raise-section" class="page-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Raise a New Complaint</h2>
+                    <p>Please provide detailed information about the issue.</p>
+                </div>
+                <form id="complaint-form" class="card">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="studentName">Full Name *</label>
+                            <input type="text" id="studentName" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentId">Student ID *</label>
+                            <input type="text" id="studentId" required placeholder="Enter your ID">
+                            <span class="error-msg">Please enter a valid Student ID.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="hostelName">Hostel Name *</label>
+                            <select id="hostelName" required>
+                                <option value="">Select Hostel</option>
+                                <option value="YGH">YGH</option>
+                                <option value="GGH">GGH</option>
+                                <option value="KBH">KBH</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="wing">Wing *</label>
+                            <select id="wing" required>
+                                <option value="">Select Wing</option>
+                                <option value="East">East</option>
+                                <option value="West">West</option>
+                                <option value="North">North</option>
+                                <option value="South">South</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Complaint Category *</label>
+                            <select id="category" required onchange="handleCategoryChange()">
+                                <option value="">Select Category</option>
+                                <option value="Food">Food</option>
+                                <option value="Water">Water</option>
+                                <option value="Wi-Fi">Wi-Fi</option>
+                                <option value="Electricity">Electricity</option>
+                                <option value="Washrooms">Washrooms</option>
+                                <option value="Cleanliness">Cleanliness</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Conditional: Room Number & Upload (Electricity, Water, Wi-Fi, Washroom, Cleanliness) -->
+                        <div id="room-fields" class="form-group" style="display: none;">
+                            <label for="roomNumber">Room Number *</label>
+                            <input type="number" id="roomNumber" placeholder="e.g. 101">
+                        </div>
+                        <div id="file-fields" class="form-group" style="display: none;">
+                            <label for="attachment">Upload Image/File</label>
+                            <input type="file" id="attachment">
+                        </div>
+
+                        <!-- Conditional: Meal Type (Food) -->
+                        <div id="meal-fields" class="form-group" style="display: none;">
+                            <label for="mealType">Meal Type *</label>
+                            <select id="mealType">
+                                <option value="">Select Meal</option>
+                                <option value="Breakfast">Breakfast</option>
+                                <option value="Lunch">Lunch</option>
+                                <option value="Snacks">Snacks</option>
+                                <option value="Dinner">Dinner</option>
+                            </select>
+                        </div>
+
+                        <!-- Conditional: Title (Other) -->
+                        <div id="other-fields" class="form-group" style="display: none;">
+                            <label for="issueTitle">Title of Issue *</label>
+                            <input type="text" id="issueTitle" placeholder="Brief subject">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="description">Description *</label>
+                            <textarea id="description" required rows="4" placeholder="Describe the issue in detail..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="urgency">Urgency Level *</label>
+                            <select id="urgency" required>
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Submit Complaint</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Track Status Section -->
+        <section id="track-section" class="page-section">
+            <div class="container small">
+                <div class="section-header">
+                    <h2>Track Your Complaint</h2>
+                    <p>Enter your Reference ID to check the latest status.</p>
+                </div>
+                <div class="search-box card">
+                    <input type="text" id="trackId" placeholder="Enter Reference ID (e.g. COMP-123)">
+                    <button class="btn btn-primary" onclick="trackComplaint()">Search</button>
+                </div>
+                <div id="track-result" class="track-result" style="display: none;">
+                    <div class="card">
+                        <div id="result-header" class="result-header"></div>
+                        <div class="stepper">
+                            <div class="step" id="step-submitted">
+                                <div class="step-icon"><i data-lucide="send"></i></div>
+                                <span>Submitted</span>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step" id="step-review">
+                                <div class="step-icon"><i data-lucide="eye"></i></div>
+                                <span>Under Review</span>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step" id="step-progress">
+                                <div class="step-icon"><i data-lucide="hammer"></i></div>
+                                <span>In Progress</span>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step" id="step-resolved">
+                                <div class="step-icon"><i data-lucide="check-circle"></i></div>
+                                <span>Resolved</span>
+                            </div>
+                        </div>
+                        <div id="admin-comments-display" class="admin-comments-display"></div>
+                    </div>
+                </div>
+                <div id="track-error" class="error-msg text-center" style="display: none;">Complaint ID not found.</div>
+            </div>
+        </section>
+
+        <!-- Admin Section -->
+        <section id="admin-section" class="page-section">
+            <div class="container container-wide">
+                <div class="section-header">
+                    <h2>Admin Dashboard</h2>
+                    <p>Manage and respond to student complaints.</p>
+                </div>
+
+                <!-- Admin Auth View -->
+                <div id="admin-auth" class="card small" style="margin: 0 auto 2rem; display: none;">
+                    <div id="set-password-view" style="display: none;">
+                        <h3>Set Admin Password</h3>
+                        <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-muted);">First-time setup: Please set a master password for admin access.</p>
+                        <div class="form-group">
+                            <input type="password" id="newAdminPassword" placeholder="Enter new password">
+                        </div>
+                        <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="setAdminPassword()">Set Password</button>
+                    </div>
+                    <div id="login-view" style="display: none;">
+                        <h3>Admin Login</h3>
+                        <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-muted);">Enter password to access dashboard.</p>
+                        <div class="form-group">
+                            <input type="password" id="adminPasswordInput" placeholder="Password">
+                        </div>
+                        <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="adminLogin()">Login</button>
+                    </div>
+                </div>
+
+                <!-- Admin Dashboard View (Hidden by default) -->
+                <div id="admin-dashboard-view" style="display: none;">
+                    <div class="admin-toolbar card">
+                        <div class="filters">
+                            <select id="filterCategory" onchange="applyFilters()">
+                                <option value="all">All Categories</option>
+                                <option value="Food">Food</option>
+                                <option value="Water">Water</option>
+                                <option value="Wi-Fi">Wi-Fi</option>
+                                <option value="Electricity">Electricity</option>
+                                <option value="Washrooms">Washrooms</option>
+                                <option value="Cleanliness">Cleanliness</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <select id="filterStatus" onchange="applyFilters()">
+                                <option value="all">All Status</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Under Review">Under Review</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-outline" style="padding: 0.5rem 1rem;" onclick="adminLogout()">Logout</button>
+                    </div>
+                    <div class="table-container card">
+                        <table id="complaints-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Student Name</th>
+                                    <th>Category</th>
+                                    <th>Urgency</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="complaints-body">
+                                <!-- Populated by script -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Success Toast -->
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <i data-lucide="check-circle"></i>
+            <div>
+                <strong>Complaint Submitted Successfully!</strong>
+                <p id="ref-id-display"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Update Modal (Custom) -->
+    <div id="admin-modal" class="modal">
+        <div class="modal-content card">
+            <h3>Update Complaint Status</h3>
+            <div class="form-group">
+                <label for="updateStatus">New Status</label>
+                <select id="updateStatus">
+                    <option value="Pending">Pending</option>
+                    <option value="Under Review">Under Review</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="adminComments">Admin Comments</label>
+                <textarea id="adminComments" rows="3" placeholder="Add update notes..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveAdminUpdate()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initial setup for icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
