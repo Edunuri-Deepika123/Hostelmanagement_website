@@ -409,26 +409,96 @@ th {
     gap: 1rem;
 }
 
+/* Mobile Menu Button */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
+    .navbar {
+        padding: 0.75rem 1rem;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
     .nav-links {
-        display: none; /* simple version icon menu could be added */
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--white);
+        flex-direction: column;
+        gap: 0;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        padding: 1rem 0;
+        border-top: 1px solid var(--border);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-link {
+        padding: 1rem 2rem;
+        width: 100%;
+        display: block;
+    }
+
+    .nav-link:hover {
+        background: var(--bg-light);
+    }
+
+    .container {
+        padding: 1rem;
+    }
+
+    .hero {
+        padding: 4rem 1rem;
+        margin: 0.5rem;
     }
     
     .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2.25rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+        justify-content: center;
     }
     
     .form-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
     .form-group.full-width {
         grid-column: span 1;
     }
-    
-    .hero-actions {
-        flex-direction: column;
+
+    .card {
+        padding: 1.5rem 1.25rem;
+    }
+
+    input, select, textarea, .btn {
+        width: 100%;
     }
     
     .stepper {
@@ -439,5 +509,36 @@ th {
     
     .step-line {
         display: none;
+    }
+
+    /* Admin specific mobile fixes */
+    .admin-toolbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .filters {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .admin-toolbar .btn {
+        width: 100%;
+    }
+
+    .table-container {
+        margin: 0 -1.25rem;
+        width: calc(100% + 2.5rem);
+        border-radius: 0;
+    }
+
+    /* Tracking search */
+    .search-box {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .search-box input {
+        width: 100%;
     }
 }
