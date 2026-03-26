@@ -56,7 +56,15 @@ body {
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 2rem;
+    gap: 1.5rem;
+    align-items: center;
+    flex: 1;
+    justify-content: flex-end;
+    margin-left: 2rem;
+}
+
+.nav-spacer {
+    flex: 1;
 }
 
 .nav-link {
@@ -214,6 +222,53 @@ input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Auth Card Redesign */
+.auth-card {
+    padding: 0;
+    overflow: hidden;
+    max-width: 480px;
+    margin: 2rem auto;
+}
+
+.auth-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 1.25rem;
+    border: none;
+    background: #f8fafc;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.auth-tab.active {
+    background: white;
+    color: #2d5a27; /* Green as requested */
+    border-bottom: 3px solid #2d5a27;
+}
+
+.auth-form {
+    padding: 2.5rem;
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.auth-card .btn-primary {
+    background-color: #2d5a27;
+}
+
+.auth-card .btn-primary:hover {
+    background-color: #1e3d1a;
 }
 
 .error-msg {
@@ -417,6 +472,13 @@ th {
     color: var(--primary);
     cursor: pointer;
     padding: 0.5rem;
+    font-size: 1.5rem;
+    z-index: 1001;
+}
+
+.mobile-menu-btn i {
+    width: 28px;
+    height: 28px;
 }
 
 /* Mobile Responsive */
@@ -441,6 +503,12 @@ th {
         box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         padding: 1rem 0;
         border-top: 1px solid var(--border);
+        margin-left: 0;
+        height: auto;
+    }
+
+    .nav-spacer {
+        display: none;
     }
 
     .nav-links.active {
@@ -541,4 +609,150 @@ th {
     .search-box input {
         width: 100%;
     }
+}
+
+/* Notifications */
+.notification-link {
+    position: relative;
+    padding: 0.5rem;
+}
+
+.badge-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ef4444;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid white;
+}
+
+/* Details View */
+.details-view {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.detail-item label {
+    display: block;
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.detail-item p {
+    font-weight: 500;
+    color: var(--secondary);
+}
+
+.detail-item.full-width {
+    grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+    .detail-item.full-width {
+        grid-column: span 1;
+    }
+}
+
+/* Notification Modal Specifics */
+.notification-modal-content {
+    max-width: 400px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.notification-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.notification-item:hover {
+    background: var(--bg-light);
+}
+
+.notification-item.unread {
+    background: #eff6ff;
+    border-left: 4px solid var(--primary);
+}
+
+.notification-item h4 {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.notification-item p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.notification-item small {
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+.empty-msg {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem 0;
+}
+
+/* Status Card for Tracking Page */
+.status-card {
+    border-left: 5px solid #e2e8f0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.status-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.status-card .status-badge {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+    border-radius: 20px;
 }
