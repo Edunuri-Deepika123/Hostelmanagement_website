@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="nav-container">
@@ -22,24 +24,35 @@
             </button>
             <ul class="nav-links" id="nav-links">
                 <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
-                <li><a href="#raise" class="nav-link" data-section="raise">Raise Complaint</a></li>
-                <li><a href="#track" class="nav-link" data-section="track">Track Status</a></li>
-                <li><a href="#admin" class="nav-link" data-section="admin">Admin</a></li>
+                <li id="raise-nav-item" style="display: none;"><a href="#raise" class="nav-link"
+                        data-section="raise">Raise Complaint</a></li>
+                <li id="track-nav-item" style="display: none;"><a href="#track" class="nav-link"
+                        data-section="track">Track Status</a></li>
+                <li class="nav-spacer"></li>
+                <li id="admin-nav-item" style="display: none;"><a href="#admin" class="nav-link" data-section="admin"><i
+                            data-lucide="layout-dashboard"></i> Dashboard</a></li>
+                <li><a href="#login" class="nav-link" data-section="login" id="login-nav-link">Login</a></li>
+                <li id="notification-nav-item" style="display: none;">
+                    <a href="#" class="nav-link notification-link">
+                        <i data-lucide="bell"></i>
+                        <span id="notification-badge" class="badge-count" style="display: none;">0</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
 
     <main id="app-content">
         <!-- Home Section -->
-        <section id="home-section" class="page-section active">
+        <section id="home-section" class="page-section">
             <div class="hero">
-                <h1>Hostel Maintenance Portal</h1>
+                <h1>Hostel Complaint Portal</h1>
                 <p>Ensuring a comfortable living experience. Report issues and track their resolution in real-time.</p>
                 <div class="hero-actions">
-                    <button class="btn btn-primary" onclick="navigateTo('raise')">
+                    <button class="btn btn-primary" id="hero-report-btn">
                         <i data-lucide="plus-circle"></i> Report an Issue
                     </button>
-                    <button class="btn btn-outline" onclick="navigateTo('track')">
+                    <button class="btn btn-outline" id="hero-track-btn">
                         <i data-lucide="search"></i> Check Status
                     </button>
                 </div>
@@ -56,36 +69,39 @@
                 <form id="complaint-form" class="card">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="studentName">Full Name *</label>
+                            <label for="studentName">Student Full Name *</label>
                             <input type="text" id="studentName" required placeholder="John Doe">
                         </div>
                         <div class="form-group">
                             <label for="studentId">Student ID *</label>
-                            <input type="text" id="studentId" required placeholder="Enter your ID">
-                            <span class="error-msg">Please enter a valid Student ID.</span>
+                            <input type="text" id="studentId" required placeholder="Enter your ID" pattern="[Bb].*"
+                                title="ID must start with B or b">
+                            <span class="error-msg">invalid ID</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentMobile">Mobile Number *</label>
+                            <input type="tel" id="studentMobile" required placeholder="Enter your mobile number">
                         </div>
                         <div class="form-group">
                             <label for="hostelName">Hostel Name *</label>
                             <select id="hostelName" required>
                                 <option value="">Select Hostel</option>
-                                <option value="YGH">YGH</option>
-                                <option value="GGH">GGH</option>
-                                <option value="KBH">KBH</option>
+                                <option value="YGH">Yamuna Girls Hostel</option>
+                                <option value="GGH">Ganga Girls Hostel</option>
+                                <option value="SGH">Saraswathi Girls Hostel</option>
+                                <option value="KBH">Krishna Boys Hostel</option>
+                                <option value="GBH">Godavari Boys Hostel</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div id="wing-group" class="form-group" style="display:none;">
                             <label for="wing">Wing *</label>
-                            <select id="wing" required>
+                            <select id="wing">
                                 <option value="">Select Wing</option>
-                                <option value="East">East</option>
-                                <option value="West">West</option>
-                                <option value="North">North</option>
-                                <option value="South">South</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="category">Complaint Category *</label>
-                            <select id="category" required onchange="handleCategoryChange()">
+                            <select id="category" required>
                                 <option value="">Select Category</option>
                                 <option value="Food">Food</option>
                                 <option value="Water">Water</option>
@@ -98,13 +114,13 @@
                         </div>
 
                         <!-- Conditional: Room Number & Upload (Electricity, Water, Wi-Fi, Washroom, Cleanliness) -->
-                        <div id="room-fields" class="form-group" style="display: none;">
-                            <label for="roomNumber">Room Number *</label>
+                        <div id="room-fields" class="form-group">
+                            <label for="roomNumber">Room Number</label>
                             <input type="number" id="roomNumber" placeholder="e.g. 101">
                         </div>
                         <div id="file-fields" class="form-group" style="display: none;">
-                            <label for="attachment">Upload Image/File</label>
-                            <input type="file" id="attachment">
+                            <label for="attachment">Upload Image/File (Optional)</label>
+                            <input type="file" id="attachment" accept="image/*,.pdf">
                         </div>
 
                         <!-- Conditional: Meal Type (Food) -->
@@ -127,67 +143,119 @@
 
                         <div class="form-group full-width">
                             <label for="description">Description *</label>
-                            <textarea id="description" required rows="4" placeholder="Describe the issue in detail..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="urgency">Urgency Level *</label>
-                            <select id="urgency" required>
-                                <option value="Low">Low</option>
-                                <option value="Medium" selected>Medium</option>
-                                <option value="High">High</option>
-                            </select>
+                            <textarea id="description" required rows="4"
+                                placeholder="Describe the issue in detail..."></textarea>
                         </div>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Submit Complaint</button>
                     </div>
                 </form>
+                <div id="submission-success-msg" class="card"
+                    style="display: none; margin-top: 1rem; text-align: center; border: 1px solid var(--success); color: var(--success); font-weight: 500; padding: 1rem; line-height: 1.5;">
+                    Your complaint has been successfully submitted. You will receive updates in your notifications when
+                    the warden replies to your complaint.
+                </div>
             </div>
         </section>
 
         <!-- Track Status Section -->
         <section id="track-section" class="page-section">
-            <div class="container small">
+            <div class="container">
                 <div class="section-header">
-                    <h2>Track Your Complaint</h2>
-                    <p>Enter your Reference ID to check the latest status.</p>
+                    <h2>Track Your Complaints</h2>
+                    <p>Below is the history of complaints you have raised and their current status.</p>
                 </div>
-                <div class="search-box card">
-                    <input type="text" id="trackId" placeholder="Enter Reference ID (e.g. COMP-123)">
-                    <button class="btn btn-primary" onclick="trackComplaint()">Search</button>
+                <div id="track-results-container" class="track-result">
+                    <!-- Complaints will be auto-loaded here -->
                 </div>
-                <div id="track-result" class="track-result" style="display: none;">
-                    <div class="card">
-                        <div id="result-header" class="result-header"></div>
-                        <div class="stepper">
-                            <div class="step" id="step-submitted">
-                                <div class="step-icon"><i data-lucide="send"></i></div>
-                                <span>Submitted</span>
-                            </div>
-                            <div class="step-line"></div>
-                            <div class="step" id="step-review">
-                                <div class="step-icon"><i data-lucide="eye"></i></div>
-                                <span>Under Review</span>
-                            </div>
-                            <div class="step-line"></div>
-                            <div class="step" id="step-progress">
-                                <div class="step-icon"><i data-lucide="hammer"></i></div>
-                                <span>In Progress</span>
-                            </div>
-                            <div class="step-line"></div>
-                            <div class="step" id="step-resolved">
-                                <div class="step-icon"><i data-lucide="check-circle"></i></div>
-                                <span>Resolved</span>
-                            </div>
-                        </div>
-                        <div id="admin-comments-display" class="admin-comments-display"></div>
-                    </div>
+                <div id="track-empty" class="text-center" style="display: none; padding: 4rem 1rem;">
+                    <i data-lucide="inbox" style="width: 48px; height: 48px; color: #cbd5e1; margin-bottom: 1rem;"></i>
+                    <p style="color: #64748b;">You haven't raised any complaints yet.</p>
                 </div>
-                <div id="track-error" class="error-msg text-center" style="display: none;">Complaint ID not found.</div>
             </div>
         </section>
 
-        <!-- Admin Section -->
+        <!-- Login Section -->
+        <section id="login-section" class="page-section active">
+            <div class="container small">
+                <div class="card auth-card">
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" data-tab="login">Login</button>
+                        <button class="auth-tab" data-tab="signup">Sign Up</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <div id="login-form-container" class="auth-form active">
+                        <div class="section-header">
+                            <h2>Welcome Back</h2>
+                            <p>Enter your details to access your account.</p>
+                        </div>
+                        <form id="login-form" autocomplete="off">
+                            <div class="form-group">
+                                <label>Student ID </label>
+                                <input type="text" id="loginUsername" placeholder="Enter your ID (e.g. B23XXXX)"
+                                    required autocomplete="off">
+                            </div>
+                            <div id="admin-password-group" class="form-group" style="display: none; margin-top: 1rem;">
+                                <label>Admin Password</label>
+                                <input type="password" id="adminPassword" placeholder="Enter admin password"
+                                    autocomplete="current-password">
+                            </div>
+                            <div id="student-password-group" class="form-group" style="margin-top: 1rem;">
+                                <label>Password</label>
+                                <input type="password" id="loginPassword" placeholder="Enter your password"
+                                    autocomplete="current-password">
+                            </div>
+                            <div id="login-error-msg" class="error-msg"
+                                style="margin-top: 1rem; color: var(--danger); font-weight: 600; text-align: center;">
+                            </div>
+                            <button type="submit" class="btn btn-primary"
+                                style="margin-top: 1.5rem; width: 100%; justify-content: center;">Login <i
+                                    data-lucide="log-in" style="width: 16px; margin-left: 0.5rem;"></i></button>
+                        </form>
+                    </div>
+
+                    <!-- Signup Form -->
+                    <div id="signup-form-container" class="auth-form">
+                        <div class="section-header">
+                            <h2>Create Account</h2>
+                            <p>Sign Up here to Submit your complaints.</p>
+                        </div>
+                        <form id="signup-form" autocomplete="off">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="signupName" placeholder="Enter your name" required autocomplete="off">
+                            </div>
+                            <div class="form-group" style="margin-top: 1rem;">
+                                <label>Student ID</label>
+                                <input type="text" id="signupId" placeholder="e.g. B23XXXX" pattern="^[Bb].*"
+                                    title="Must start with B or b" required autocomplete="off">
+                            </div>
+                            <div class="form-group" style="margin-top: 1rem;">
+                                <label>Mobile Number</label>
+                                <input type="tel" id="signupMobile" placeholder="Enter mobile number" required autocomplete="off">
+                            </div>
+                            <div class="form-group" style="margin-top: 1rem;">
+                                <label>Password</label>
+                                <input type="password" id="signupPassword" placeholder="Create a password" required autocomplete="new-password">
+                            </div>
+                            <div id="signup-error-msg" class="error-msg"
+                                style="margin-top: 1rem; color: var(--danger); font-weight: 600; text-align: center;">
+                            </div>
+                            <div id="signup-success-msg" class="success-msg"
+                                style="display: none; margin-top: 1rem; color: var(--success); font-weight: 600; text-align: center;">
+                                Account created successfully! Please login.</div>
+                            <button type="submit" class="btn btn-primary"
+                                style="margin-top: 1.5rem; width: 100%; justify-content: center;">Sign Up <i
+                                    data-lucide="user-plus" style="width: 16px; margin-left: 0.5rem;"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Dashboard Section (Visible only when logged in as admin) -->
         <section id="admin-section" class="page-section">
             <div class="container container-wide">
                 <div class="section-header">
@@ -195,31 +263,10 @@
                     <p>Manage and respond to student complaints.</p>
                 </div>
 
-                <!-- Admin Auth View -->
-                <div id="admin-auth" class="card small" style="margin: 0 auto 2rem; display: none;">
-                    <div id="set-password-view" style="display: none;">
-                        <h3>Set Admin Password</h3>
-                        <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-muted);">First-time setup: Please set a master password for admin access.</p>
-                        <div class="form-group">
-                            <input type="password" id="newAdminPassword" placeholder="Enter new password">
-                        </div>
-                        <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="setAdminPassword()">Set Password</button>
-                    </div>
-                    <div id="login-view" style="display: none;">
-                        <h3>Admin Login</h3>
-                        <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-muted);">Enter password to access dashboard.</p>
-                        <div class="form-group">
-                            <input type="password" id="adminPasswordInput" placeholder="Password">
-                        </div>
-                        <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="adminLogin()">Login</button>
-                    </div>
-                </div>
-
-                <!-- Admin Dashboard View (Hidden by default) -->
-                <div id="admin-dashboard-view" style="display: none;">
+                <div id="admin-dashboard-view">
                     <div class="admin-toolbar card">
                         <div class="filters">
-                            <select id="filterCategory" onchange="applyFilters()">
+                            <select id="filterCategory">
                                 <option value="all">All Categories</option>
                                 <option value="Food">Food</option>
                                 <option value="Water">Water</option>
@@ -229,7 +276,7 @@
                                 <option value="Cleanliness">Cleanliness</option>
                                 <option value="Other">Other</option>
                             </select>
-                            <select id="filterStatus" onchange="applyFilters()">
+                            <select id="filterStatus">
                                 <option value="all">All Status</option>
                                 <option value="Pending">Pending</option>
                                 <option value="Under Review">Under Review</option>
@@ -237,18 +284,19 @@
                                 <option value="Resolved">Resolved</option>
                             </select>
                         </div>
-                        <button class="btn btn-outline" style="padding: 0.5rem 1rem;" onclick="adminLogout()">Logout</button>
+                        <button class="btn btn-outline" style="padding: 0.5rem 1rem;"
+                            id="admin-logout-btn">Logout</button>
                     </div>
                     <div class="table-container card">
                         <table id="complaints-table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Student ID</th>
                                     <th>Student Name</th>
                                     <th>Category</th>
-                                    <th>Urgency</th>
                                     <th>Date</th>
                                     <th>Status</th>
+                                    <th>Details</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -273,7 +321,7 @@
         </div>
     </div>
 
-    <!-- Admin Update Modal (Custom) -->
+    <!-- Admin Update Modal -->
     <div id="admin-modal" class="modal">
         <div class="modal-content card">
             <h3>Update Complaint Status</h3>
@@ -284,6 +332,7 @@
                     <option value="Under Review">Under Review</option>
                     <option value="In Progress">In Progress</option>
                     <option value="Resolved">Resolved</option>
+                    <option value="Solved">Solved</option>
                 </select>
             </div>
             <div class="form-group">
@@ -291,16 +340,39 @@
                 <textarea id="adminComments" rows="3" placeholder="Add update notes..."></textarea>
             </div>
             <div class="modal-actions">
-                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="saveAdminUpdate()">Save Changes</button>
+                <button class="btn btn-outline" id="close-modal-btn">Cancel</button>
+                <button class="btn btn-primary" id="save-update-btn">Save Changes</button>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
-    <script>
-        // Initial setup for icons
-        lucide.createIcons();
-    </script>
+    <!-- Complaint Details Modal -->
+    <div id="details-modal" class="modal">
+        <div class="modal-content card" style="max-width: 600px;">
+            <h3>Complaint Details</h3>
+            <div id="details-content" class="details-view">
+                <!-- Populated by script -->
+            </div>
+            <div class="modal-actions" style="margin-top: 2rem;">
+                <button class="btn btn-primary" id="close-details-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="modal">
+        <div class="modal-content notification-modal-content">
+            <div class="modal-header">
+                <h3>Notifications</h3>
+                <button class="close-btn" id="close-notifications-btn">&times;</button>
+            </div>
+            <div id="notification-list" class="notification-list">
+                <!-- Notifications will be injected here -->
+                <p class="empty-msg">No new notifications</p>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
